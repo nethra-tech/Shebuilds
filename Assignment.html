@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personal Expense Calculator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #dbeafe, #eff6ff);
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 500px;
+            max-width: 100%;
+            margin: auto;
+            background-color: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e3a8a;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        h3 {
+            color: #334155;
+            margin-top: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            margin-top: 5px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            background-color: #f8fafc;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            background-color: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        /* Show Summary Button */
+        .summary-btn {
+            background-color: #0f766e;
+        }
+
+        .summary-btn:hover {
+            background-color: #115e59;
+        }
+
+        #expenseList {
+            margin-top: 15px;
+        }
+
+        .expense {
+            background-color: #f8fafc;
+            padding: 13px 15px;
+            margin-top: 8px;
+            border-left: 5px solid #2563eb;
+            border-radius: 6px;
+            color: #334155;
+            font-weight: 500;
+        }
+
+        /* Summary */
+
+        .summary {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #eff6ff, #f0fdfa);
+            border-radius: 12px;
+            border: 1px solid #dbeafe;
+        }
+
+        .summary h3 {
+            margin-top: 0;
+            text-align: center;
+            color: #1e3a8a;
+            font-size: 21px;
+        }
+
+        .summary p {
+            font-size: 17px;
+            background-color: white;
+            padding: 12px;
+            border-radius: 7px;
+            margin: 10px 0;
+            color: #334155;
+        }
+
+        .summary p span {
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            .container {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Personal Expense Calculator</h1>
+
+    <!-- Income -->
+    <label>Monthly Income</label>
+    <input type="number" id="income" placeholder="Enter your income">
+
+    <!-- Expense -->
+    <label>Expense Amount</label>
+    <input type="number" id="amount" placeholder="Enter expense amount">
+
+    <!-- Category -->
+    <label>Expense Category</label>
+    <select id="category">
+        <option value="Food">Food</option>
+        <option value="Travel">Travel</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Entertainment">Entertainment</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <button onclick="addExpense()">Add Expense</button>
+
+    <!-- NEW BUTTON -->
+    <button class="summary-btn"
+            onclick="document.querySelector('.summary').style.display='block'">
+        Show Summary
+    </button>
+
+    <!-- Expense List -->
+    <h3>Expense Details</h3>
+    <div id="expenseList"></div>
+
+    <!-- Summary -->
+    <div class="summary">
+        <h3>Summary Report</h3>
+
+        <p>Total Income: ₹<span id="totalIncome">0</span></p>
+
+        <p>Total Expenses: ₹<span id="totalExpense">0</span></p>
+
+        <p>Savings: ₹<span id="savings">0</span></p>
+    </div>
+
+</div>
+
+
+<script>
+
+    // Variables
+    var totalExpense = 0;
+
+    // Function to add an expense
+    function addExpense() {
+
+        // Get values from input
+        var income = Number(document.getElementById("income").value);
+        var amount = Number(document.getElementById("amount").value);
+        var category = document.getElementById("category").value;
+
+        // Check whether amount is entered
+        if (amount <= 0) {
+            alert("Please enter a valid expense amount.");
+            return;
+        }
+
+        // Add expense
+        totalExpense = totalExpense + amount;
+
+        // Calculate savings
+        var savings = income - totalExpense;
+
+        // Display income
+        document.getElementById("totalIncome").innerHTML = income;
+
+        // Display total expense
+        document.getElementById("totalExpense").innerHTML = totalExpense;
+
+        // Display savings
+        document.getElementById("savings").innerHTML = savings;
+
+        // Display expense details
+        var expenseList = document.getElementById("expenseList");
+
+        expenseList.innerHTML +=
+            "<div class='expense'>" +
+            category + " - ₹" + amount +
+            "</div>";
+
+        // Clear amount input
+        document.getElementById("amount").value = "";
+    }
+
+</script>
+
+</body>
+</html>
